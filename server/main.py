@@ -1,18 +1,14 @@
 from fastapi import FastAPI, Request
 from db.database import engine, Session
 from api.services.auth import get_current_user
-from models.models import SQLModel, Log
+from models.models import SQLModel 
 from api.endpoints.auth import auth_router
-from api.endpoints.files import files_router
 from api.endpoints.user import user_router
-from api.endpoints.chat import chat_router
-from api.endpoints.logs import log_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 origins = [
     "http://localhost:3000",
-    "https://projectxrepo-749362345242.europe-west3.run.app",
 ]
 
 app.add_middleware(
@@ -24,10 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
-app.include_router(files_router)
 app.include_router(user_router)
-app.include_router(chat_router)
-app.include_router(log_router)
 
 
 SQLModel.metadata.create_all(engine)
@@ -54,15 +47,6 @@ async def log_request(request: Request, call_next):
         except Exception:
             pass
 
-        log = Log(
-            method=method,
-            path=path,
-            status_code=status_code,
-            ip_address=ip_address,
-            user_id=user.id if user else None,
-        )
-
-        session.add(log)
-        session.commit()
+        
 
     return response
