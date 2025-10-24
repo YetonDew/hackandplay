@@ -123,7 +123,7 @@ export function ChatInterface({ userEmail }: ChatInterfaceProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-secondary/20 to-primary/10">
+    <div className="flex min-h-screen flex-col bg-linear-to-br from-background via-secondary/20 to-primary/10">
       {/* Header */}
       <header className="border-b border-primary/20 bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">

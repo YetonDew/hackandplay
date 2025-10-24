@@ -45,7 +45,7 @@ export default function ChatPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-primary/10">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-background via-secondary/20 to-primary/10">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
