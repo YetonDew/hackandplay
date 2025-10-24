@@ -32,6 +32,7 @@ export function AuthForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginData),
+		credentials: "include",
       })
 
       if (!response.ok) {
@@ -135,14 +136,14 @@ export function AuthForm() {
                 <Input
                   id="login-password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="********"
                   value={loginData.password}
                   onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                   required
                   disabled={isLoading}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -186,14 +187,14 @@ export function AuthForm() {
                 <Input
                   id="register-password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="********"
                   value={registerData.password}
                   onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                   required
                   disabled={isLoading}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
