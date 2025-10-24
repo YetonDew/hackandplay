@@ -7,7 +7,8 @@ import "../styles/global.css";
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
-  <div class="bg-gray-100 w-full min-h-screen flex items-center justify-center">
+  <!-- Scope global para Alpine (no cambia la UI) -->
+  <div x-data="{ showSignIn: false }" class="bg-gray-100 w-full min-h-screen flex items-center justify-center">
     <div class="w-full py-8">
       <div class="flex items-center justify-center space-x-2">
         <div class="w-12 h-12">
@@ -30,7 +31,8 @@ import "../styles/global.css";
           </a>
         </p>
 
-        <form class="my-8 text-sm" novalidate>
+        <!-- x-data de formulario y submit con $event -->
+        <form class="my-8 text-sm" novalidate x-data="signupForm()" @submit.prevent="submit($event)" x-ref="form">
           <!-- Name -->
           <div class="flex flex-col my-4">
             <label for="name" class="text-gray-700">Name</label>
@@ -148,6 +150,7 @@ import "../styles/global.css";
             <input
               type="checkbox"
               id="remember_me"
+              name="terms"
               class="mr-2 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
               required
             />
@@ -172,12 +175,93 @@ import "../styles/global.css";
             <button
               type="submit"
               class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 rounded-lg transition-colors cursor-pointer"
+              :disabled="loading"
             >
               Sign Up
             </button>
           </div>
+
+          <!-- Mensajes (sin cambios visuales) -->
+          <p x-show="error" x-text="error" class="text-sm text-red-600" aria-live="polite"></p>
+          <p x-show="success" class="text-sm text-green-600" aria-live="polite">Account created!</p>
         </form>
       </div>
     </div>
   </div>
+
+  <script is:inline>
+    const API_BASE =
+      (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.PUBLIC_API_BASE)
+        ? import.meta.env.PUBLIC_API_BASE
+        : "";
+
+    function signupForm() {
+      return {
+        loading: false,
+        success: false,
+        error: null,
+        async submit(event) {
+          this.loading = true;
+          this.success = false;
+          this.error = null;
+
+          const form = this.$refs.form || event?.target;
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
+
+          // Checks the UX before sending
+          if (!data.name || !data.email || !data.password || !data.password_confirmation) {
+            this.loading = false;
+            this.error = "Please fill in all fields.";
+            return;
+          }
+          if (data.password !== data.password_confirmation) {
+            this.loading = false;
+            this.error = "Passwords do not match.";
+            return;
+          }
+          if (!form.querySelector("#remember_me")?.checked) {
+            this.loading = false;
+            this.error = "You must accept the terms.";
+            return;
+          }
+
+          // Payload
+          const payload = {
+            name: data.name,
+            email: data.email,
+            password: data.password
+          };
+
+          try {
+            const res = await fetch(`${API_BASE}/api/signup`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload),
+              credentials: "include"
+            });
+
+            if (!res.ok) {
+              let msg = "Sign-up failed.";
+              try {
+                const err = await res.json();
+                msg = err.detail || err.message || msg;
+              } catch (_) {
+                msg = `${msg} (HTTP ${res.status})`;
+              }
+              throw new Error(msg);
+            }
+            this.success = true;
+            form.reset();
+          } catch (e) {
+            this.error = e?.message || "Something went wrong.";
+          } finally {
+            this.loading = false;
+          }
+        }
+      };
+    }
+  </script>
 </body>
