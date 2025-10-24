@@ -10,7 +10,7 @@ cd server
 python3 -m venv .venv
 ```
 
-2. Install requirerments
+2. Install requirements
 ```bash
 pip install -r requirerments.txt
 ```
