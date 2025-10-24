@@ -4,6 +4,7 @@ from api.services.auth import get_current_user
 from models.models import SQLModel 
 from api.endpoints.auth import auth_router
 from api.endpoints.user import user_router
+from api.endpoints.chat import chat_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -21,6 +22,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(chat_router)
 
 
 SQLModel.metadata.create_all(engine)
