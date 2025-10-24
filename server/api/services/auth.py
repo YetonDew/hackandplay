@@ -22,7 +22,7 @@ def create_user(user: RegisterDTO, session: SessionDep):
     hashed_password = sha256(user.password.encode()).hexdigest()
     new_user = User(email=user.email,
                     password=hashed_password,
-                    role='default')
+                    name=user.name)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
