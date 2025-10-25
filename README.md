@@ -24,7 +24,7 @@ An **AI chatbot** that proposes the best plan in real time and explains why.
   
 ## Demo
 ![Login](docs/login.png)
-![Offer cards](chat.png)
-![Chat open](chatpage.png)
+![Offer cards](docs/chat.png)
+![Chat open](docs/chatpage.png)
 
 > Note: This repo contains the hackathon prototype. Real operator data integrations and production-grade deployment are future work.
