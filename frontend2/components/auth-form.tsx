@@ -46,6 +46,7 @@ export function AuthForm() {
       toast({
         title: "Welcome back!",
         description: "Successfully logged in.",
+		duration: 1000,
       })
 
       router.push("/chat")
