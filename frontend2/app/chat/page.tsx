@@ -62,13 +62,13 @@ export default function ChatPage() {
       <main className="container mx-auto flex-1 px-4 py-6">
 <link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
 
-<section className="pt-20 lg:pt-[120px] pb-10 lg:pb-20">
+<section className="pt-20 lg:pt-10 pb-10 lg:pb-20">
    <div className="container">
       <div className="flex flex-wrap -mx-4">
          <div className="w-full md:w-1/2 xl:w-1/3 px-4">
             <div className="bg-white rounded-lg overflow-hidden mb-10">
                <img
-                  src="https://tigerfrommars.sirv.com/123/1.webp"
+                  src="https://tigerfrommars.sirv.com/123/2.webp"
                   alt="image"
                   className="w-full"
                   />
@@ -118,7 +118,7 @@ export default function ChatPage() {
          <div className="w-full md:w-1/2 xl:w-1/3 px-4">
             <div className="bg-white rounded-lg overflow-hidden mb-10">
                <img
-                  src="https://tigerfrommars.sirv.com/123/2.webp"
+                  src="https://tigerfrommars.sirv.com/123/1.webp"
                   alt="image"
                   className="w-full"
                   />
