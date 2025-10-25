@@ -141,7 +141,7 @@ export default function ChatFloatingWidget({
         aria-label={open ? "Close chat" : "Open chat"}
         aria-expanded={open}
         onClick={toggle}
-        className="fixed bottom-4 right-4 z-50 h-12 w-12 rounded-full shadow-2xl sm:bottom-6 sm:right-6"
+        className="fixed bottom-4 right-4 z-50 h-12 w-12 rounded-full shadow-2xl sm:bottom-6 sm:right-6 cursor-pointer"
       >
         <MessageSquare className="h-5 w-5" />
       </Button>
@@ -165,25 +165,25 @@ export default function ChatFloatingWidget({
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 24, opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 240 }}
-              className="pointer-events-auto fixed bottom-20 right-4 z-50 w-[min(420px,calc(100vw-1.5rem))] sm:right-6"
+              className="pointer-events-auto fixed bottom-20 right-4 z-50 w-[min(520px,calc(100vw-2rem))] sm:right-6"
               role="dialog"
               aria-label="BestOffers chat"
             >
-              <Card className="relative flex max-h-[80vh] min-h-[520px] flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl">
+              <Card className="relative flex max-h-[85vh] min-h-[720px] flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl">
                 {/* Close button */}
                 <Button
                   size="icon"
                   variant="ghost"
                   onClick={close}
-                  className="absolute right-2 top-2 h-8 w-8 rounded-full"
+                  className="absolute right-2 top-2 h-8 w-8 rounded-full cursor-pointer"
                   aria-label="Close chat"
                 >
                   <X className="h-4 w-4" />
                 </Button>
 
-                {/* ==== Chat Area (your snippet) ==== */}
-                <div className="container mx-auto flex flex-1 flex-col px-4 py-6">
-                  <Card className="flex flex-1 flex-col border-primary/20 shadow-xl">
+                {/* ==== Chat Area ==== */}
+                <div className="container mx-auto flex flex-1 flex-col px-4 py-6 -mb-5">
+                  <Card className="flex flex-1 flex-col">
                     <ScrollArea className="flex-1 p-4">
                       <div className="space-y-4">
                         {messages.map((message, index) => (
@@ -194,14 +194,14 @@ export default function ChatFloatingWidget({
                             }`}
                           >
                             {message.role === "assistant" && (
-                              <Avatar className="h-8 w-8 border-2 border-primary/20">
+                              <Avatar className="h-8 w-8 border-2">
                                 <AvatarFallback className="bg-primary/10">
                                   <Bot className="h-4 w-4 text-primary" />
                                 </AvatarFallback>
                               </Avatar>
                             )}
                             <div
-                              className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                              className={`max-w-[88%] rounded-2xl px-4 py-3 ${
                                 message.role === "user"
                                   ? "bg-primary text-primary-foreground"
                                   : "bg-muted text-foreground"
@@ -269,6 +269,7 @@ export default function ChatFloatingWidget({
                           disabled={isLoading || !input.trim()}
                           size="icon"
                           aria-label="Send message"
+						  className="cursor-pointer"
                         >
                           <Send className="h-4 w-4" />
                         </Button>
