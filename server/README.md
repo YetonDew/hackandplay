@@ -10,12 +10,17 @@ cd server
 python3 -m venv .venv
 ```
 
-2. Install requirements
+2. Source the env
+```bash
+source .venv/bin/activate
+```
+
+3. Install requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the server (you must be in server folder)
+4. Run the server (you must be in server folder)
 ```bash
 fastapi dev main.py
 ```
