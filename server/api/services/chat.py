@@ -52,21 +52,29 @@ def retrieve_context(query: str, top_k: int = 1):
 
 def collect_user_info(conversation: list[dict]) -> dict:
     system_prompt = {
-        "role": "system",
-        "content": (
-            "You are a helpful assistant that collects information from the user "
-            "to prepare a personalized offer search. "
-            "Ask clarifying questions until you have all necessary details. "
-            "Once you have enough information, clearly say: 'OK, I have all the data.'"
-        ),
-    }
+    "role": "system",
+    "content": (
+        "You are a professional e-sales assistant for a telecom company offering data and mobile plans. "
+        "Your task is to identify the user's profile and needs in order to recommend the best matching plan. "
+        "Ask short, focused questions about the user's lifestyle, usage habits, and preferences. "
+        "Specifically, gather at least 2–3 of the following details: "
+        "1) number of people or devices to connect, "
+        "2) average monthly data use or type of internet usage (streaming, travel, work, etc.), "
+        "3) travel habits (local, EU, global), "
+        "4) desired flexibility (contract vs. no commitment), "
+        "5) special interests (students, family, eco, smart home, business). "
+        "Ask only necessary questions to make a confident plan match. "
+        "Be concise, professional, and keep the tone neutral."
+        "If the user refuses to share more or you have enough information, clearly say: 'OK, I have all the data.' "
+    ),
+}
 
     messages = [system_prompt] + conversation
 
     response = client.chat.completions.create(
         model="qwen3-235b-a22b-instruct-2507",
         messages=messages,
-        max_tokens=512,
+        max_tokens=2048,
         temperature=0.7,
         top_p=0.8,
         presence_penalty=0,
@@ -99,14 +107,26 @@ def run_rag_pipeline(user_summary: str) -> str:
     context_text = "\n\n".join(context)
 
     prompt = f"""
-            User's needs summary:
+            You are a telecom e-sales assistant.
+
+            User summary:
             {user_summary}
 
-            Based only on the context below, generate the best personalized offer or response.
-            Shortlly explain your reasoning
-
-            Context:
+            Context (selected plan details):
             {context_text}
+
+            Task:
+            Describe the plan clearly and completely, using the context text as the base. Then explain how each of its key features meets the user's stated needs.
+            Sound confident and professional — like a skilled merchant who knows their product inside out.
+
+            Instructions:
+            - Start by presenting the plan exactly as in the context (price, description, features).
+            - Then interpret its value for the user in 2–4 sentences.
+            - Always relate features to user needs (speed, travel, flexibility, etc.).
+            - Stay factual, clear, and persuasive without exaggeration.
+            - End with one short concluding line confirming the fit.
+
+            Output only the final explanation, no extra formatting or sections.
             """
 
     response = client.chat.completions.create(
@@ -116,7 +136,7 @@ def run_rag_pipeline(user_summary: str) -> str:
                 { "role": "system", "content": prompt},
                 { "role": "user", "content": "" },
         ],
-        max_tokens=512,
+        max_tokens=2048,
         temperature=0.7,
         top_p=0.8,
         presence_penalty=0,
