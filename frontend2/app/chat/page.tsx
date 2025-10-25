@@ -60,20 +60,164 @@ export default function ChatPage() {
 
       {/* Main content area — build the rest of your page here */}
       <main className="container mx-auto flex-1 px-4 py-6">
-        <div className="grid gap-6 md:grid-cols-3">
-          <section className="md:col-span-2 space-y-4">
-            <h2 className="text-2xl font-semibold">Welcome, {userEmail || "user"}</h2>
-            <p className="text-sm text-muted-foreground">
-              This is your page content. Add dashboards, tables, product lists, etc.
-            </p>
-            {/* Your components go here */}
-          </section>
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
 
-          <aside className="space-y-4">
-            <h3 className="text-lg font-medium">Sidebar</h3>
-            <p className="text-sm text-muted-foreground">Filters, quick actions, summaries…</p>
-          </aside>
-        </div>
+<section className="pt-20 lg:pt-10 pb-10 lg:pb-20">
+   <div className="container">
+      <div className="flex flex-wrap -mx-4">
+         <div className="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div className="bg-white rounded-lg overflow-hidden mb-10">
+               <img
+                  src="https://tigerfrommars.sirv.com/123/2.webp"
+                  alt="image"
+                  className="w-full"
+                  />
+               <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                  <h3>
+                     <a
+                        href="javascript:void(0)"
+                        className="
+                        font-semibold
+                        text-dark text-xl
+                        sm:text-[22px]
+                        md:text-xl
+                        lg:text-[22px]
+                        xl:text-xl
+                        2xl:text-[22px]
+                        mb-4
+                        block
+                        hover:text-primary
+                        "
+                        >
+                     Freedom+ 5G — 119,99 zł/mies.
+                     </a>
+                  </h3>
+                  <p className="text-base text-body-color leading-relaxed mb-7">
+					Unlimited 5G in Poland (up to 600 Mbps). 25 GB EU roaming + 10 GB in the US/Canada/Switzerland. 1 line. Unlimited calls & texts. 3 months of streaming included. Premium Individual plan.
+                  </p>
+                  <a
+                     href="javascript:void(0)"
+                     className="
+					 bg-transparent
+                     inline-block
+                     py-2
+                     px-7
+                     border border-[#E5E7EB]
+                     rounded-full
+                     text-base text-gray-700
+                     font-medium
+                     hover:border-primary hover:bg-primary hover:text-white
+                     transition
+                     "
+                     >
+                  View Details
+                  </a>
+               </div>
+            </div>
+         </div>
+         <div className="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div className="bg-white rounded-lg overflow-hidden mb-10">
+               <img
+                  src="https://tigerfrommars.sirv.com/123/1.webp"
+                  alt="image"
+                  className="w-full"
+                  />
+               <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                  <h3>
+                     <a
+                        href="javascript:void(0)"
+                        className="
+                        font-semibold
+                        text-dark text-xl
+                        sm:text-[22px]
+                        md:text-xl
+                        lg:text-[22px]
+                        xl:text-xl
+                        2xl:text-[22px]
+                        mb-4
+                        block
+                        hover:text-primary
+                        "
+                        >
+                     FamilyConnect — 199,99 zł/mies.
+                     </a>
+                  </h3>
+                  <p className="text-base text-body-color leading-relaxed mb-7">
+                     For families who want to stay connected. 300 GB shared (auto-split) for up to 5 lines, 40 GB EU roaming, 1 child line with parental controls, data-usage app, single bill. Family Shared plan.
+                  </p>
+                  <a
+                     href="javascript:void(0)"
+                     className="
+					 bg-transparent
+                     inline-block
+                     py-2
+                     px-7
+                     border border-[#E5E7EB]
+                     rounded-full
+                     text-base text-gray-700
+                     font-medium
+                     hover:border-primary hover:bg-primary hover:text-white
+                     transition
+                     "
+                     >
+                  View Details
+                  </a>
+               </div>
+            </div>
+         </div>
+         <div className="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div className="bg-white rounded-lg overflow-hidden mb-10">
+               <img
+                  src="https://tigerfrommars.sirv.com/123/3.webp"
+                  alt="image"
+                  className="w-full"
+                  />
+               <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                  <h3>
+                     <a
+                        href="javascript:void(0)"
+                        className="
+                        font-semibold
+                        text-dark text-xl
+                        sm:text-[22px]
+                        md:text-xl
+                        lg:text-[22px]
+                        xl:text-xl
+                        2xl:text-[22px]
+                        mb-4
+                        block
+                        hover:text-primary
+                        "
+                        >
+                    FlexGo! — 59,99 zł/mies.
+                     </a>
+                  </h3>
+                  <p className="text-base text-body-color leading-relaxed mb-7">
+                     Full flexibility—toggle services anytime. 50 GB (expandable in app), 1 line, no contract, 15 GB EU roaming, unlimited calls, suspend number up to 3 months. No-contract subscription.
+                  </p>
+                  <a
+                     href="javascript:void(0)"
+                     className="
+					 bg-transparent
+                     inline-block
+                     py-2
+                     px-7
+                     border border-[#E5E7EB]
+                     rounded-full
+                     text-base text-gray-700
+                     font-medium
+                     hover:border-primary hover:bg-primary hover:text-white
+                     transition
+                     "
+                     >
+                  View Details
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
       </main>
 
       {/* Floating chat over the whole page */}
