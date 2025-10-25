@@ -169,9 +169,9 @@ export default function ChatFloatingWidget({
               role="dialog"
               aria-label="BestOffers chat"
             >
-              <Card className="relative flex max-h-[80vh] min-h-[520px] flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl">
+              {/* <Card className="relative flex max-h-[80vh] min-h-[520px] flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl"> */}
                 {/* Close button */}
-                <Button
+                {/* <Button
                   size="icon"
                   variant="ghost"
                   onClick={close}
@@ -179,11 +179,11 @@ export default function ChatFloatingWidget({
                   aria-label="Close chat"
                 >
                   <X className="h-4 w-4" />
-                </Button>
+                </Button> */}
 
                 {/* ==== Chat Area (your snippet) ==== */}
-                <div className="container mx-auto flex flex-1 flex-col px-4 py-6">
-                  <Card className="flex flex-1 flex-col border-primary/20 shadow-xl">
+                {/* <div className="container mx-auto flex flex-1 flex-col px-4 py-6"> */}
+                  <Card className="flex flex-1 flex-col border-primary/20 shadow-xl min-h-[660px]">
                     <ScrollArea className="flex-1 p-4">
                       <div className="space-y-4">
                         {messages.map((message, index) => (
@@ -275,9 +275,9 @@ export default function ChatFloatingWidget({
                       </form>
                     </div>
                   </Card>
-                </div>
+                {/* </div> */}
                 {/* ================================== */}
-              </Card>
+              {/* </Card> */}
             </motion.div>
           </motion.div>
         )}
