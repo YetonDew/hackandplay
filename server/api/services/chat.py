@@ -17,7 +17,7 @@ async def get_answer(conversation):
     data = collect_user_info(conversation)
     answer = ''
     if data['is_complete']:
-        answer = run_rag_pipeline(data.user_summary)
+        answer = run_rag_pipeline(data['user_summary'])
     else:
         answer = data['assistant']
     return answer
@@ -47,7 +47,7 @@ def retrieve_context(query: str, top_k: int = 1):
     cur.close()
     conn.close()
 
-    return [row.content for row in rows]
+    return [row['content'] for row in rows]
 
 
 def collect_user_info(conversation: list[dict]) -> dict:
@@ -102,7 +102,7 @@ def run_rag_pipeline(user_summary: str) -> str:
             User's needs summary:
             {user_summary}
 
-            Based on the context below, generate the best personalized offer or response.
+            Based only on the context below, generate the best personalized offer or response.
             Shortlly explain your reasoning
 
             Context:
@@ -120,7 +120,7 @@ def run_rag_pipeline(user_summary: str) -> str:
         temperature=0.7,
         top_p=0.8,
         presence_penalty=0,
-        stream=True
+        stream=False
     )
 
     return response.choices[0].message.content.strip()
