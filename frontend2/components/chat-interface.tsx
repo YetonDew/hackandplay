@@ -6,9 +6,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { MessageSquare, X, Bot, User, Send, Loader2 } from "lucide-react"
+import { MessageSquare, Bot, User, Send, Loader2 } from "lucide-react"
 
 type ChatMessage = {
   role: "user" | "assistant"
@@ -27,7 +26,7 @@ export default function ChatFloatingWidget({
   userEmail = "user@example.com",
   rememberStateKey = "bestoffers_chat_open",
 }: ChatFloatingWidgetProps) {
-	// Backend API URL !!!!!
+  // Backend API URL !!!!!
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
   const [open, setOpen] = useState(false)
@@ -36,11 +35,19 @@ export default function ChatFloatingWidget({
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const bottomRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages, isLoading, open])
+  // Plain div viewport for rock-solid scrolling
+  const viewportRef = useRef<HTMLDivElement | null>(null)
+
+  // Track whether user is near the bottom
+  const [isAtBottom, setIsAtBottom] = useState(true)
+
+  // Helper: scroll to bottom of the viewport
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "auto") => {
+    const vp = viewportRef.current
+    if (!vp) return
+    vp.scrollTo({ top: vp.scrollHeight, behavior })
+  }, [])
 
   // Persist open/closed state
   useEffect(() => {
@@ -59,6 +66,7 @@ export default function ChatFloatingWidget({
   const toggle = useCallback(() => setOpen((v) => !v), [])
   const close = useCallback(() => setOpen(false), [])
 
+  // Close on ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close()
@@ -66,6 +74,33 @@ export default function ChatFloatingWidget({
     if (open) window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [open, close])
+
+  // When the panel opens, jump to bottom once (no continuous auto-scroll)
+  useEffect(() => {
+    if (!open) return
+    // wait for layout to settle
+    requestAnimationFrame(() => scrollToBottom("auto"))
+  }, [open, scrollToBottom])
+
+  // Subscribe to manual scrolling to know if we should keep view pinned
+  useEffect(() => {
+    const vp = viewportRef.current
+    if (!vp) return
+
+    const onScroll = () => {
+      const distance = vp.scrollHeight - vp.scrollTop - vp.clientHeight
+      setIsAtBottom(distance < 32)
+    }
+
+    onScroll()
+    vp.addEventListener("scroll", onScroll, { passive: true })
+    return () => vp.removeEventListener("scroll", onScroll)
+  }, [open])
+
+  // On new messages: only auto-stick if user is already at bottom
+  useEffect(() => {
+    if (isAtBottom) scrollToBottom("smooth")
+  }, [messages, isLoading, isAtBottom, scrollToBottom])
 
   // --- Sending logic (mock) ---
   const sendAndReply = async (text: string) => {
@@ -113,7 +148,6 @@ export default function ChatFloatingWidget({
       setMessages((m) => [...m, assistantMessage])
     } catch (error) {
       console.error("[widget] Chat error:", error)
-      // mismo fallback que usabas en la versión de página
       const errorMessage: ChatMessage = {
         role: "assistant",
         content:
@@ -127,11 +161,11 @@ export default function ChatFloatingWidget({
   }
 
   const handleSendMessage = async (e: FormEvent) => {
-	e.preventDefault()
-	const trimmed = input.trim()
-	if (!trimmed) return
-	setInput("")
-	await sendAndReply(trimmed)
+    e.preventDefault()
+    const trimmed = input.trim()
+    if (!trimmed) return
+    setInput("")
+    await sendAndReply(trimmed)
   }
 
   return (
@@ -169,22 +203,18 @@ export default function ChatFloatingWidget({
               role="dialog"
               aria-label="BestOffers chat"
             >
-              <Card className="relative flex max-h-[85vh] min-h-[720px] flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl">
-                {/* Close button */}
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={close}
-                  className="absolute right-2 top-2 h-8 w-8 rounded-full cursor-pointer"
-                  aria-label="Close chat"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-
+              {/* Use a fixed height to prevent overflowing screens; inner children can scroll */}
+              <Card className="relative flex h-[75vh] w-full flex-col overflow-hidden rounded-2xl border-primary/30 shadow-2xl">
                 {/* ==== Chat Area ==== */}
-                <div className="container mx-auto flex flex-1 flex-col px-4 py-6 -mb-5">
-                  <Card className="flex flex-1 flex-col">
-                    <ScrollArea className="flex-1 p-4">
+                <div className="container mx-auto flex flex-1 min-h-0 flex-col px-4 py-6 -mb-5">
+                  <Card className="flex flex-1 min-h-0 flex-col">
+                    {/* Scrollable viewport (manual scrolling) */}
+                    <div
+                      ref={viewportRef}
+                      className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4"
+                      tabIndex={0}
+                      aria-label="Messages"
+                    >
                       <div className="space-y-4">
                         {messages.map((message, index) => (
                           <div
@@ -207,7 +237,9 @@ export default function ChatFloatingWidget({
                                   : "bg-muted text-foreground"
                               }`}
                             >
-                              <p className="text-sm leading-relaxed">{message.content}</p>
+                              <p className="text-sm leading-relaxed break-words">
+                                {message.content}
+                              </p>
                               <p
                                 className={`mt-1 text-xs ${
                                   message.role === "user"
@@ -247,11 +279,8 @@ export default function ChatFloatingWidget({
                             </div>
                           </div>
                         )}
-
-                        {/* Auto-scroll anchor */}
-                        <div ref={bottomRef} />
                       </div>
-                    </ScrollArea>
+                    </div>
 
                     {/* Input Area */}
                     <div className="border-t border-primary/20 p-4">
@@ -269,7 +298,7 @@ export default function ChatFloatingWidget({
                           disabled={isLoading || !input.trim()}
                           size="icon"
                           aria-label="Send message"
-						  className="cursor-pointer"
+                          className="cursor-pointer"
                         >
                           <Send className="h-4 w-4" />
                         </Button>
